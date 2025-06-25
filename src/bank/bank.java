@@ -82,21 +82,23 @@ public class bank {
 					String line;
 					while((line = read.readLine())!= null) {
 						String[] parts = line.split(",");
+						if(parts.length == 3) {
 						acc = Integer.parseInt(parts[0]);
 						nom = parts[1];
 						double bal = Integer.parseInt(parts[2]);
 						impo.add(new bank(acc,nom,bal));
+						}
 					}
 				}
 				for(int i=0;i<count;i++) {
-					if(accounts.get(i).accnum == acc) {
-					System.out.print("\nenter your password "+accounts.get(i).nom+" : ");
+					if(impo.get(i).accnum == acc) {
+					System.out.print("\nenter your password "+impo.get(i).nom+" : ");
 					String psswd = scan.nextLine();
-					if(accounts.get(i).pass.equals(psswd)) {
-					accounts.get(i).disp();
+					if(impo.get(i).pass.equals(psswd)) {
+					impo.get(i).disp();
 					System.out.print("\nhow much do you wanna deposit : ");
 					Double bal = scan.nextDouble();
-					accounts.get(i).setBalance(bal);
+					impo.get(i).setBalance(bal);
 					System.out.print("\nyour deposit has been succesfully !");
 					}
 					else {
