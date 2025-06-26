@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -29,7 +28,7 @@ public class bank {
 		return accnum+","+nom+","+balance+","+pass;
 	}
 	public void setBalance(double balance) {
-		this.balance = balance;
+		this.balance = this.balance + balance;
 	}
 	public void withdraw(Double withdraw) {
 		this.balance = this.balance - withdraw;
@@ -49,6 +48,7 @@ public class bank {
 		String nom;
 		String pass;
 		double bal;
+		double with = 0;
 		int option;
 		int count = 0;
 		int accnum = linecount+1;
@@ -136,10 +136,18 @@ public class bank {
 					String psswd = scan.nextLine();
 					if(impo.get(i).pass.equals(psswd)) {
 					impo.get(i).disp();
+					if(impo.get(i).balance != 0) {
 					System.out.print("\nhow much do you wanna withdraw : ");
-					Double with = scan.nextDouble();
+					with = scan.nextDouble();
+					if(with <= impo.get(i).balance ) {
 					impo.get(i).withdraw(with);
 					System.out.print("\nyour withdraw has been succesfully !");
+					}else {
+						System.out.print("\nyou don't have enough money to widthraw");
+					}
+					}else {
+						System.out.print("\nyou don't have enough money to widthraw");
+					}
 					}
 					}
 				}
