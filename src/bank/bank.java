@@ -21,18 +21,12 @@ public class bank {
 		this.pass = pass;
 	}
 	
-	public bank(int acc, String nom2, double bal) {
-		this.accnum = acc;
-		this.nom = nom2;
-		this.balance = bal;
-	}
-
 	public void disp() {
-		System.out.print("hello "+nom+","+"\naccount number : "+accnum+","+"\nbalance : "+balance+" DH");
+		System.out.print("\nhello "+nom+","+"\naccount number : "+accnum+","+"\nbalance : "+balance+" DH");
 		System.out.print("\n--------------------------------------------------------------------");
 	}
 	public String tostring() {
-		return accnum+","+nom+","+balance;
+		return accnum+","+nom+","+balance+","+pass;
 	}
 	public void setBalance(double balance) {
 		this.balance = balance;
@@ -44,11 +38,35 @@ public class bank {
 		Scanner scan = new Scanner(System.in);
 		ArrayList<bank> accounts = new ArrayList<>();
 		ArrayList<bank> impo = new ArrayList<>();
+		int linecount = 0;
+		try(BufferedReader reader = new BufferedReader(new FileReader("accounts.txt"))){
+			while(reader.readLine() != null) {
+				linecount++;
+			}
+		}
 		boolean bool = true;
+		int acc;
+		String nom;
+		String pass;
+		double bal;
 		int option;
 		int count = 0;
-		int accnum = 1;
+		int accnum = linecount+1;
 		double balance = 0;
+		int j=0;
+		try(BufferedReader read = new BufferedReader(new FileReader("accounts.txt"))){
+			String line;
+			while((line = read.readLine())!= null) {
+				String[] parts = line.split(",");
+				if(parts.length == 4) {
+				acc = Integer.parseInt(parts[0]);
+				nom = parts[1];
+				pass = parts[3];
+				bal = Double.parseDouble(parts[2]);
+				impo.add(new bank(nom,acc,bal,pass));
+				}
+			}
+		}
 		while(bool) {
 			System.out.print("\n1- create account");
 			System.out.print("\n2- deposit money");
@@ -60,52 +78,37 @@ public class bank {
 			switch(option) {
 			case 1:
 				System.out.print("\nwhat is your name : ");
-				String nom = scan.nextLine();
+				nom = scan.nextLine();
 				System.out.print("create a password : ");
-				String pass = scan.nextLine();
+				pass =scan.nextLine();
 				accounts.add(count,new bank(nom,accnum,balance,pass));
 				System.out.print("\nyour account has been created !");
 				System.out.print("\n"+accnum+" is your account number");
 				count++;
-				accnum++;
-				try(BufferedWriter writer = new BufferedWriter(new FileWriter("accounts",true))){
-					for(int i=0;i<count;i++) {
+				try(BufferedWriter writer = new BufferedWriter(new FileWriter("accounts.txt",true))){
+					for(int i=j;i<count;i++) {
 						writer.write(accounts.get(i).tostring());
+						writer.newLine();
 					}
 				}
+				accnum++;
+				j++;
 				break;
 			case 2:
 				System.out.print("\nenter you account number : ");
-				int acc = scan.nextInt();
+				acc = scan.nextInt();
 				scan.nextLine();
-				try(BufferedReader read = new BufferedReader(new FileReader("accounts.txt"))){
-					String line;
-					while((line = read.readLine())!= null) {
-						String[] parts = line.split(",");
-						if(parts.length == 3) {
-						acc = Integer.parseInt(parts[0]);
-						nom = parts[1];
-						double bal = Integer.parseInt(parts[2]);
-						impo.add(new bank(acc,nom,bal));
-						}
-					}
-				}
-				for(int i=0;i<count;i++) {
+				for(int i=0;i<linecount;i++) {
 					if(impo.get(i).accnum == acc) {
 					System.out.print("\nenter your password "+impo.get(i).nom+" : ");
 					String psswd = scan.nextLine();
 					if(impo.get(i).pass.equals(psswd)) {
 					impo.get(i).disp();
 					System.out.print("\nhow much do you wanna deposit : ");
-					Double bal = scan.nextDouble();
+					bal = scan.nextDouble();
 					impo.get(i).setBalance(bal);
 					System.out.print("\nyour deposit has been succesfully !");
 					}
-					else {
-						System.out.print("\nincorrect password");
-					}
-					}else {
-						System.out.print("there is no account with this number");
 					}
 				}
 				break;
@@ -113,18 +116,13 @@ public class bank {
 				System.out.print("\nenter you account number : ");
 				acc = scan.nextInt();
 				scan.nextLine();
-				for(int i=0;i<count;i++) {
-					if(accounts.get(i).accnum == acc) {
-					System.out.print("\nenter your password "+accounts.get(i).nom+" : ");
+				for(int i=0;i<linecount;i++) {
+					if(impo.get(i).accnum == acc) {
+					System.out.print("\nenter your password "+impo.get(i).nom+" : ");
 					String psswd = scan.nextLine();
-					if(accounts.get(i).pass.equals(psswd)) {
-					accounts.get(i).disp();
+					if(impo.get(i).pass.equals(psswd)) {
+					impo.get(i).disp();
 					}
-					else {
-						System.out.print("\nincorrect password");
-					}
-					}else {
-						System.out.print("there is no account with this number");
 					}
 				}
 				break;
@@ -132,23 +130,22 @@ public class bank {
 				System.out.print("\nenter you account number : ");
 				acc = scan.nextInt();
 				scan.nextLine();
-				for(int i=0;i<count;i++) {
-					if(accounts.get(i).accnum == acc) {
-					System.out.print("\nenter your password "+accounts.get(i).nom+" : ");
+				for(int i=0;i<linecount;i++) {
+					if(impo.get(i).accnum == acc) {
+					System.out.print("\nenter your password "+impo.get(i).nom+" : ");
 					String psswd = scan.nextLine();
-					if(accounts.get(i).pass.equals(psswd)) {
-					accounts.get(i).disp();
+					if(impo.get(i).pass.equals(psswd)) {
+					impo.get(i).disp();
 					System.out.print("\nhow much do you wanna withdraw : ");
 					Double with = scan.nextDouble();
-					accounts.get(i).withdraw(with);
+					impo.get(i).withdraw(with);
 					System.out.print("\nyour withdraw has been succesfully !");
-					}else {
-						System.out.print("\nincorrect password");
 					}
-					}else {
-						System.out.print("there is no account with this number");
 					}
 				}
+				break;
+			case 5:
+				bool = false;
 				break;
 			}
 		}
