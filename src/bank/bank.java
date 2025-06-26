@@ -48,7 +48,6 @@ public class bank {
 		Scanner scan = new Scanner(System.in);
 		ArrayList<bank> impo = new ArrayList<>();
 
-		// Load accounts from file
 		try (BufferedReader read = new BufferedReader(new FileReader("accounts.txt"))) {
 			String line;
 			while ((line = read.readLine()) != null) {
