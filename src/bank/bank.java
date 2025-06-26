@@ -43,6 +43,8 @@ public class bank {
 				linecount++;
 			}
 		}
+		boolean found = false;
+		boolean match = false;
 		boolean bool = true;
 		int acc;
 		String nom;
@@ -100,16 +102,24 @@ public class bank {
 				scan.nextLine();
 				for(int i=0;i<linecount;i++) {
 					if(impo.get(i).accnum == acc) {
+						found = true;
 					System.out.print("\nenter your password "+impo.get(i).nom+" : ");
 					String psswd = scan.nextLine();
 					if(impo.get(i).pass.equals(psswd)) {
+						match = true;
 					impo.get(i).disp();
 					System.out.print("\nhow much do you wanna deposit : ");
 					bal = scan.nextDouble();
 					impo.get(i).setBalance(bal);
 					System.out.print("\nyour deposit has been succesfully !");
 					}
+					break;
 					}
+				}
+				if(found && match) {
+					System.out.print("\nWelcome !");
+				}else{
+					System.out.print("\nyour identifiants are incorrect !");
 				}
 				break;
 			case 3:
@@ -118,12 +128,20 @@ public class bank {
 				scan.nextLine();
 				for(int i=0;i<linecount;i++) {
 					if(impo.get(i).accnum == acc) {
+					found = true;
 					System.out.print("\nenter your password "+impo.get(i).nom+" : ");
 					String psswd = scan.nextLine();
 					if(impo.get(i).pass.equals(psswd)) {
+						match = true;
 					impo.get(i).disp();
+					break;
 					}
 					}
+				}
+				if(found && match) {
+					System.out.print("\nWelcome !");
+				}else{
+					System.out.print("\nyour identifiants are incorrect !");
 				}
 				break;
 			case 4:
@@ -132,9 +150,11 @@ public class bank {
 				scan.nextLine();
 				for(int i=0;i<linecount;i++) {
 					if(impo.get(i).accnum == acc) {
+						found = true;
 					System.out.print("\nenter your password "+impo.get(i).nom+" : ");
 					String psswd = scan.nextLine();
 					if(impo.get(i).pass.equals(psswd)) {
+						match = true;
 					impo.get(i).disp();
 					if(impo.get(i).balance != 0) {
 					System.out.print("\nhow much do you wanna withdraw : ");
@@ -149,7 +169,13 @@ public class bank {
 						System.out.print("\nyou don't have enough money to widthraw");
 					}
 					}
+					break;
 					}
+				}
+				if(!found || !match) {
+					System.out.print("\nWelcome !");
+				}else {
+					System.out.print("\nyour idenifiants are incorrect !");
 				}
 				break;
 			case 5:
